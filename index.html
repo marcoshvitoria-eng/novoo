@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<title>Grave e Leia</title>
+<meta name="description" content="Grave, apresente e edite vídeos direto do navegador, sem depender de servidores." />
+<meta name="theme-color" content="#001F3F" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Grave e Leia" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="apple-touch-icon" href="./icons/icon-192.png" />
+<link rel="icon" href="./icons/icon-192.png" />
+<link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ===================== TELA INICIAL ===================== -->
+  <section id="screen-home" class="view">
+    <div class="topbar">
+      <h1>Grave e Leia</h1>
+      <button id="btnInstall" class="btn-white">⬇ Baixar app</button>
+    </div>
+    <div class="home-scroll">
+      <div class="cards-grid">
+        <button class="card" data-go="vertical">
+          <div class="icon">📱</div>
+          <div class="title">Gravar na vertical</div>
+          <div class="desc">Formato TikTok, texto rolante em cima e câmera embaixo.</div>
+        </button>
+        <button class="card" data-go="horizontal">
+          <div class="icon">🖥️</div>
+          <div class="title">Gravar na horizontal</div>
+          <div class="desc">Formato YouTube, texto na esquerda e câmera na direita.</div>
+        </button>
+        <button class="card" data-go="apresentacao">
+          <div class="icon">🎤</div>
+          <div class="title">Apresentação</div>
+          <div class="desc">Vídeo de fundo com sua câmera em miniatura arrastável.</div>
+        </button>
+        <button class="card" data-go="edicao">
+          <div class="icon">✂️</div>
+          <div class="title">Edição de vídeo</div>
+          <div class="desc">Corte partes indesejadas e monte o vídeo final.</div>
+        </button>
+        <button class="card" data-go="meio">
+          <div class="icon">🔀</div>
+          <div class="title">Gravar meio a meio</div>
+          <div class="desc">Câmera de um lado, vídeo adicionado do outro.</div>
+        </button>
+        <button class="card" data-go="videos">
+          <div class="icon">🎞️</div>
+          <div class="title">Vídeos</div>
+          <div class="desc">Todos os vídeos gravados e salvos ficam aqui.</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GRAVAR VERTICAL ===================== -->
+  <section id="screen-vertical" class="view screen hidden">
+    <button class="back-btn" data-back>‹</button>
+    <div class="split-vertical" style="flex:1;display:flex;">
+      <div class="half">
+        <div class="teleprompter">
+          <div class="teleprompter-text-wrap" id="v-textWrap">
+            <div class="teleprompter-text" id="v-text">Toque em "Editar texto" para colar a fala que vai rolar aqui enquanto você grava.</div>
+          </div>
+          <div class="teleprompter-controls">
+            <button class="icon-btn" id="v-playText" title="Play/Pause rolagem">▶</button>
+            <label>Velocidade
+              <input type="range" id="v-speed" min="5" max="120" value="35" />
+            </label>
+            <button class="edit-text-btn" id="v-editText">Editar texto</button>
+          </div>
+        </div>
+      </div>
+      <div class="half">
+        <div class="camera-area" id="v-camArea">
+          <video class="live" id="v-video" autoplay playsinline muted></video>
+          <div class="rec-indicator hidden" id="v-recInd"><span class="rec-dot blinking"></span>REC</div>
+          <div class="zoom-bar">
+            <span>Zoom</span>
+            <input type="range" id="v-zoom" min="1" max="3" step="0.1" value="1" />
+          </div>
+          <div class="tap-hint" id="v-hint">Toque na tela para iniciar a gravação</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GRAVAR HORIZONTAL ===================== -->
+  <section id="screen-horizontal" class="view screen hidden">
+    <button class="back-btn" data-back>‹</button>
+    <div class="split-horizontal auto-rotate-vertical" id="h-container" style="flex:1;display:flex;">
+      <div class="half">
+        <div class="teleprompter">
+          <div class="teleprompter-text-wrap" id="h-textWrap">
+            <div class="teleprompter-text" id="h-text">Toque em "Editar texto" para colar a fala que vai rolar aqui enquanto você grava.</div>
+          </div>
+          <div class="teleprompter-controls">
+            <button class="icon-btn" id="h-playText" title="Play/Pause rolagem">▶</button>
+            <label>Velocidade
+              <input type="range" id="h-speed" min="5" max="120" value="35" />
+            </label>
+            <button class="edit-text-btn" id="h-editText">Editar texto</button>
+          </div>
+        </div>
+      </div>
+      <div class="half">
+        <div class="camera-area" id="h-camArea">
+          <video class="live" id="h-video" autoplay playsinline muted></video>
+          <div class="rec-indicator hidden" id="h-recInd"><span class="rec-dot blinking"></span>REC</div>
+          <div class="zoom-bar">
+            <span>Zoom</span>
+            <input type="range" id="h-zoom" min="1" max="3" step="0.1" value="1" />
+          </div>
+          <div class="tap-hint" id="h-hint">Toque na tela para iniciar a gravação</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== APRESENTAÇÃO ===================== -->
+  <section id="screen-apresentacao" class="view screen hidden">
+    <button class="back-btn" data-back>‹</button>
+    <div class="toolbar">
+      <select id="ap-format" class="select-white">
+        <option value="tiktok">Formato TikTok (vertical)</option>
+        <option value="youtube">Formato YouTube (horizontal)</option>
+      </select>
+      <button class="edit-text-btn" id="ap-shape">Miniatura: redonda</button>
+      <button class="edit-text-btn" id="ap-bgPick">Escolher vídeo de fundo</button>
+      <input type="file" id="ap-bgFile" accept="video/*" class="hidden" />
+      <div class="spacer"></div>
+    </div>
+    <div class="presentation-stage" id="ap-stage">
+      <video class="bg" id="ap-bgVideo" playsinline loop></video>
+      <div class="pip circle" id="ap-pip" style="width:130px;height:130px;left:16px;top:16px;">
+        <video id="ap-camVideo" autoplay playsinline muted></video>
+        <div class="pip-resize" id="ap-pipResize"></div>
+      </div>
+      <div class="rec-indicator hidden" id="ap-recInd"><span class="rec-dot blinking"></span>REC</div>
+      <div class="tap-hint" id="ap-hint">Toque na tela para iniciar a gravação</div>
+    </div>
+    <div class="toolbar">
+      <button class="icon-btn" id="ap-bgPlay" title="Play/pause vídeo de fundo">▶</button>
+      <button class="icon-btn" id="ap-bgRestart" title="Voltar ao início">⟲</button>
+      <label style="font-size:12px;display:flex;align-items:center;gap:6px;">Tamanho miniatura
+        <input type="range" id="ap-pipSize" min="80" max="260" value="130" />
+      </label>
+    </div>
+  </section>
+
+  <!-- ===================== EDIÇÃO DE VÍDEO ===================== -->
+  <section id="screen-edicao" class="view screen hidden">
+    <button class="back-btn" data-back>‹</button>
+    <div class="editor-wrap">
+      <div class="field-row">
+        <button class="btn-white" id="ed-pickFile">Escolher vídeo</button>
+        <button class="btn-white" id="ed-fromGallery">Escolher da galeria</button>
+        <input type="file" id="ed-fileInput" accept="video/*" class="hidden" />
+      </div>
+      <video id="ed-video" controls playsinline class="hidden"></video>
+
+      <div id="ed-tools" class="hidden">
+        <div class="trim-slider-wrap">
+          <div class="field-row">
+            <label>Início: <span id="ed-startLabel">0:00</span></label>
+            <input type="range" class="dual" id="ed-startRange" min="0" max="100" value="0" />
+          </div>
+          <div class="field-row">
+            <label>Fim: <span id="ed-endLabel">0:00</span></label>
+            <input type="range" class="dual" id="ed-endRange" min="0" max="100" value="100" />
+          </div>
+        </div>
+        <div class="big-actions">
+          <button class="btn-white" id="ed-preview">▶ Ouvir trecho selecionado</button>
+          <button class="btn-white btn-ok" id="ed-addSegment">+ Adicionar trecho à lista</button>
+        </div>
+        <p style="font-size:12px;opacity:.85;">Marque um trecho de início e fim e adicione à lista quantas vezes precisar. Os trechos marcados serão unidos, na ordem da lista, excluindo tudo o que ficar de fora — assim você remove as partes indesejadas do vídeo.</p>
+        <div class="segments-list" id="ed-segments"></div>
+        <div class="big-actions">
+          <button class="btn-white btn-danger" id="ed-clearSegments">Limpar lista</button>
+          <button class="btn-white btn-ok" id="ed-export">Gerar vídeo final</button>
+        </div>
+        <div id="ed-exportStatus" style="font-size:13px;text-align:center;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GRAVAR MEIO A MEIO ===================== -->
+  <section id="screen-meio" class="view screen hidden">
+    <button class="back-btn" data-back>‹</button>
+    <div class="toolbar">
+      <select id="m-format" class="select-white">
+        <option value="tiktok">Formato TikTok (vertical)</option>
+        <option value="youtube">Formato YouTube (horizontal)</option>
+      </select>
+      <div class="spacer"></div>
+    </div>
+    <div class="dual-wrap" id="m-container">
+      <div class="half" id="m-camHalf" style="flex-basis:50%;">
+        <div class="camera-area">
+          <video class="live" id="m-video" autoplay playsinline muted></video>
+        </div>
+      </div>
+      <div id="m-resizer" class="resizer-h"><div class="resizer-grip"></div></div>
+      <div class="half" id="m-vidHalf" style="flex-basis:50%;">
+        <div class="add-video-slot" id="m-addSlot">
+          <video id="m-otherVideo" playsinline loop></video>
+          <button class="plus-btn" id="m-plusBtn">+</button>
+        </div>
+      </div>
+      <input type="file" id="m-fileInput" accept="video/*" class="hidden" />
+      <div class="rec-indicator hidden" id="m-recInd"><span class="rec-dot blinking"></span>REC</div>
+      <div class="tap-hint" id="m-hint">Toque na área da câmera para iniciar a gravação</div>
+    </div>
+  </section>
+
+  <!-- ===================== VÍDEOS (GALERIA) ===================== -->
+  <section id="screen-videos" class="view screen hidden">
+    <button class="back-btn" data-back>‹</button>
+    <div class="gallery-wrap">
+      <div class="gallery-grid" id="gallery-grid"></div>
+      <div class="empty-state hidden" id="gallery-empty">Nenhum vídeo salvo ainda.<br/>Grave em uma das funções para vê-lo aqui.</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Modal simples para editar texto do teleprompter -->
+<div id="textModal" class="download-toast hidden" style="z-index:60;">
+  <textarea id="textModalArea" style="width:100%;max-width:520px;height:40vh;border-radius:12px;border:none;padding:14px;font-size:16px;color:#000;"></textarea>
+  <div class="btn-row">
+    <button class="btn-white" id="textModalSave">Salvar</button>
+    <button class="btn-white" id="textModalCancel">Cancelar</button>
+  </div>
+</div>
+
+<script src="./app.js"></script>
+</body>
+</html>
